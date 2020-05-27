@@ -5,4 +5,4 @@
 [Spring web](https://spring.io/guides/gs/serving-web-content/)
 [Bootstrap 文档](https://v3.bootcss.com/)
 ## 工具
-idea git
+idea git 菜鸟教程

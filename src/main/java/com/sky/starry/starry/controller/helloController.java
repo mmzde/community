@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class helloController {
     @RequestMapping("/")
     public String Hello(Model model){
-        return "hellomogf ";
+        return "index";
     }
     @RequestMapping("/hello")
     public String Hello(@RequestParam(name = "name") String name, Model model){

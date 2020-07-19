@@ -50,7 +50,15 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">登录</a></li>
+                <li><a href="https://github.com/login/oauth/authorize?client_id=4bc98ff7ae188a5f5470&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a></li>
+                <!--
+                    client_id	string	必填项。注册时从GitHub收到的客户端ID 。
+                    redirect_uri	string	授权后将用户发送到应用程序中的URL。请参阅以下有关重定向网址的详细信息。
+                    login	string	建议用于登录和授权应用程序的特定帐户。
+                    scope	string	以空格分隔的范围列表。如果未提供，则scope对于未授权该应用程序任何作用域的用户，默认为空列表。对于拥有该应用程序授权范围的用户，不会向用户显示带有范围列表的OAuth授权页面。取而代之的是，流程的这一步将自动完成用户已为应用程序授权的一组作用域。例如，如果用户已经执行了两次Web流程并授权了一个具有user范围的令牌和另一个具有repo范围的令牌，则不提供的第三个Web流程scope将收到具有user和repo范围的令牌。
+                    state	string	不可猜测的随机字符串。它用于防止跨站点请求伪造攻击。
+                    allow_signup	string	在OAuth流程期间，是否向未认证的用户提供注册GitHub的选项。默认值为true。false当策略禁止注册时使用。
+                -->
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我 <span class="caret"></span></a>
                     <ul class="dropdown-menu">

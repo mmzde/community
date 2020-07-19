@@ -11,7 +11,7 @@ public class helloController {
         return "index";
     }
     @RequestMapping("/hello")
-    public String Hello(@RequestParam(name = "name") String name, Model model){
+    public String Hello(@RequestParam(name = "name",defaultValue = "姓名七个字") String name, Model model){
         model.addAttribute("name",name);
         return "hello";
     }

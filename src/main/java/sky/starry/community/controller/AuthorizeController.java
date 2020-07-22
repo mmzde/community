@@ -11,7 +11,10 @@ import sky.starry.community.mapper.UserMapper;
 import sky.starry.community.model.User;
 import sky.starry.community.pojo.GithubProvider;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller
@@ -32,7 +35,8 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request
+                           HttpServletRequest request,
+                           HttpServletResponse response
                            ) throws Exception {
         //请求git身份，访问特定网址获取code和state（https://github.com/login/oauth/authorize?client_id=4bc98ff7ae188a5f5470&redirect_uri=http://localhost:8080/callback&scope=user&state=1） GET
 
@@ -51,13 +55,11 @@ public class AuthorizeController {
 
         //以code为令牌，及各种参量获取匹配网址获取参量access_token POST
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-
         //以token参量获取用户信息 GET
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
+        
 
-        System.out.println(githubUser.getName());
-
-        if(githubUser != null){
+        if(githubUser != null && githubUser.getId()!=null){
 
             User user = new User();
             user.setToken(UUID.randomUUID().toString());
@@ -65,11 +67,14 @@ public class AuthorizeController {
             user.setAccount_id(String.valueOf(githubUser.getId()));
             user.setGmt_create(System.currentTimeMillis());
             user.setGmt_modified(user.getGmt_create());
-
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
 
             //登陆成功，写cookse和session
-            request.getSession().setAttribute("user",githubUser);
+            //request.getSession().setAttribute("user",githubUser);
+
+            response.addCookie(new Cookie("token",user.getToken()));
+
             return "redirect:/";
         }else {
             //登陆失败，重新登陆

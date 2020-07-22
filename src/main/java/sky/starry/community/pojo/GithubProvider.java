@@ -1,16 +1,6 @@
 package sky.starry.community.pojo;
 
 import okhttp3.*;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpVersion;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 import sky.starry.community.dto.AccessTokenDTO;
 import com.alibaba.fastjson.*;
@@ -76,14 +66,14 @@ public class GithubProvider {
         OkHttpClient okHttpClient = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token="+accessToken)
+                .url("https://api.github.com/user")
+                .addHeader("Authorization", "token " + accessToken)
                 .build();
 
         try {
             Response response = okHttpClient.newCall(request).execute();
 
             String string = response.body().string();
-            System.out.println(string);
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
 
             return githubUser;

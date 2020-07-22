@@ -1,0 +1,26 @@
+body{
+    background-color: #2aabd2;
+}
+
+.main{
+    margin-top: 60px;
+    margin-right: 180px;
+    margin-left: 180px;
+    background-color: white;
+    padding-bottom: 50px;
+}
+
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+.img-avartar{
+    width: 40px;
+    height: 40px;
+}
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}

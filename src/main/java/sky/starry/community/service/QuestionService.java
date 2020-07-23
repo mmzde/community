@@ -32,7 +32,6 @@ public class QuestionService {
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
-
             questionDTOS.add(questionDTO);
         }
 

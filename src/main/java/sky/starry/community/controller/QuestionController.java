@@ -21,6 +21,7 @@ public class QuestionController {
                              @PathVariable("id") Integer id){
 
         QuestionDTO questionDTO = questionService.getById(id);
+        questionService.incView(id);
         model.addAttribute("question",questionDTO);
         return "question";
     }

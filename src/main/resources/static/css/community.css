@@ -31,3 +31,7 @@ body{
 .community-menu{
     color: #999;
 }
+.jumbotron{
+    margin: 50px;
+    text-align: center;
+}

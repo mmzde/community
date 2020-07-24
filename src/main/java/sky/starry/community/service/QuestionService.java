@@ -5,6 +5,8 @@ import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sky.starry.community.Exceptiom.CustomizeErrorCode;
+import sky.starry.community.Exceptiom.CustomizeException;
 import sky.starry.community.dto.PaginationDTO;
 import sky.starry.community.dto.QuestionDTO;
 import sky.starry.community.mapper.QuestionMapper;
@@ -116,6 +118,9 @@ public class QuestionService {
     public QuestionDTO getById(Integer id){
 
         Question question = questionMapper.getById(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user = userMapper.findByID(question.getCreator());
@@ -130,7 +135,17 @@ public class QuestionService {
             questionMapper.create(question);
         }else {
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+            int i = questionMapper.update(question);
+            if(i != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
+    }
+
+    public void incView(Integer id) {
+        Question updateQuestion = new Question();
+        updateQuestion.setViewCount(1);
+        updateQuestion.setId(id);
+        questionMapper.updateView(updateQuestion);
     }
 }

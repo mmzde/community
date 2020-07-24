@@ -1,10 +1,7 @@
 package sky.starry.community.mapper;
 
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import sky.starry.community.model.User;
 
 @Mapper
@@ -18,4 +15,10 @@ public interface UserMapper{
 
     @Select("select * from user where id = #{id}")
     User findByID(Integer id);
+
+    @Select("select * from user where account_id = #{ccountId}")
+    User findByAccountID(String accountId);
+
+    @Update("updata user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where account_id = #{accountId}")
+    void updata(User user);
 }

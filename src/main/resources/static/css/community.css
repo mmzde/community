@@ -3,9 +3,9 @@ body{
 }
 
 .main{
-    margin-top: 60px;
-    margin-right: 180px;
-    margin-left: 180px;
+    margin-top: 40px;
+    margin-right: 360px;
+    margin-left: 360px;
     background-color: white;
     padding-bottom: 50px;
 }
@@ -22,5 +22,12 @@ body{
 .text-desc{
     font-size: 12px;
     font-weight: normal;
+    color: #999;
+}
+
+.section{
+    margin-top: 15px;
+}
+.community-menu{
     color: #999;
 }

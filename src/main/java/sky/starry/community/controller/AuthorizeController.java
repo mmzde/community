@@ -10,6 +10,7 @@ import sky.starry.community.dto.GithubUser;
 import sky.starry.community.mapper.UserMapper;
 import sky.starry.community.model.User;
 import sky.starry.community.pojo.GithubProvider;
+import sky.starry.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import java.util.UUID;
 public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
+    @Autowired
+    private UserService userService;
 
     @Value("${github.client.id}")
     String clientId;
@@ -68,7 +71,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insert(user);
+            userService.createOrUpdata(user);
 
             //登陆成功，写cookse和session
             //request.getSession().setAttribute("user",githubUser);
@@ -80,5 +83,17 @@ public class AuthorizeController {
             //登陆失败，重新登陆
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/loginout")
+    private String loginout(HttpServletRequest request,
+                            HttpServletResponse response){
+
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 }

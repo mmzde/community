@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import sky.starry.community.mapper.UserMapper;
 import sky.starry.community.model.User;
 
-import java.util.UUID;
-
 @Service
 public class UserService {
 
@@ -26,7 +24,7 @@ public class UserService {
             dbUser.setToken(user.getToken());
             dbUser.setName(user.getName());
             dbUser.setAvatarUrl(user.getAvatarUrl());
-            userMapper.updata(dbUser);
+            userMapper.update(dbUser);
         }
     }
 }

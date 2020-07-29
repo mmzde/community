@@ -1,7 +1,5 @@
 package sky.starry.community.service;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +70,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = questionMapper.countByUserId(userId);
@@ -115,7 +113,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id){
+    public QuestionDTO getById(Long id){
 
         Question question = questionMapper.getById(id);
         if(question == null){
@@ -142,10 +140,10 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question updateQuestion = new Question();
         updateQuestion.setViewCount(1);
         updateQuestion.setId(id);
-        questionMapper.updateView(updateQuestion);
+        questionMapper.incView(updateQuestion);
     }
 }

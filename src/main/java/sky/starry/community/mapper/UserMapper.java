@@ -14,11 +14,11 @@ public interface UserMapper{
     User findByToken(@Param("token") String token);
 
     @Select("select * from user where id = #{id}")
-    User findByID(Integer id);
+    User findByID(Long id);
 
     @Select("select * from user where account_id = #{ccountId}")
     User findByAccountID(String accountId);
 
-    @Update("updata user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where account_id = #{accountId}")
-    void updata(User user);
+    @Update("update user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where account_id = #{accountId}")
+    void update(User user);
 }

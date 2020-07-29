@@ -31,7 +31,8 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="user" domainObjectName="User" enableCountByExample="false"
+        <table tableName="question" domainObjectName="Question" mapperName="QuestionExtMapper"
+               enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"

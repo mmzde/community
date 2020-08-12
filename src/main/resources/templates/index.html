@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="css/community.css">
     <title>Title</title>
 </head>
+<script type="text/javascript">
+    window.onload = function () {
+        var closable = window.localStorage.getItem("closable");
+        debugger;
+        if(closable == 'true'){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
 <body>
 <div th:insert="~{navigation :: copy}"></div>
 <div class="container-fluid main">

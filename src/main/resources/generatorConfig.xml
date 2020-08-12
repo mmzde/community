@@ -31,16 +31,19 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="question" domainObjectName="Question" mapperName="QuestionExtMapper"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false"
-               enableDeleteByPrimaryKey="false"
-               enableInsert="false"
-               enableUpdateByPrimaryKey="false">
+        <table tableName="user" domainObjectName="User" mapperName="UserExaMapper"
+
+        >
         </table>
 
     </context>
 </generatorConfiguration>
+<!--        table内置属性-->
+        <!--               enableCountByExample="false"-->
+        <!--               enableUpdateByExample="false"-->
+        <!--               enableDeleteByExample="false"-->
+        <!--               enableSelectByExample="false"-->
+        <!--               selectByExampleQueryId="false"-->
+        <!--               enableDeleteByPrimaryKey="false"-->
+        <!--               enableInsert="false"-->
+        <!--               enableUpdateByPrimaryKey="false"-->

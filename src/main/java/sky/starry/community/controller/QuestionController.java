@@ -5,24 +5,32 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import sky.starry.community.dto.CommentDTO;
 import sky.starry.community.dto.QuestionDTO;
-import sky.starry.community.mapper.QuestionMapper;
+import sky.starry.community.enums.CommentTypeEnum;
+import sky.starry.community.service.CommentService;
 import sky.starry.community.service.QuestionService;
+
+import java.util.List;
 
 @Controller
 public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/question/{id}")
     private String Qusertion(Model model,
                              @PathVariable("id") Long id){
 
         QuestionDTO questionDTO = questionService.getById(id);
+
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
+        model.addAttribute("comments",commentDTOS);
         return "question";
     }
 }

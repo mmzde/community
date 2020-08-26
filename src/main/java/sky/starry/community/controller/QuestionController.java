@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import sky.starry.community.dto.CommentDTO;
 import sky.starry.community.dto.QuestionDTO;
 import sky.starry.community.enums.CommentTypeEnum;
+import sky.starry.community.model.Question;
 import sky.starry.community.service.CommentService;
 import sky.starry.community.service.QuestionService;
 
@@ -26,11 +27,13 @@ public class QuestionController {
                              @PathVariable("id") Long id){
 
         QuestionDTO questionDTO = questionService.getById(id);
-
+        List<QuestionDTO> relatedQuestion = questionService.selectRelated(questionDTO);
         List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
         model.addAttribute("comments",commentDTOS);
+        model.addAttribute("relatedQuestions",relatedQuestion);
+
         return "question";
     }
 }

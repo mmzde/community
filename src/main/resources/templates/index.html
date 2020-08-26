@@ -18,7 +18,6 @@
 <script type="text/javascript">
     window.onload = function () {
         var closable = window.localStorage.getItem("closable");
-        debugger;
         if(closable == 'true'){
             window.close();
             window.localStorage.removeItem("closable");
@@ -54,7 +53,6 @@
                     <h4 class="media-heading" >
                         <a th:href="@{'/question/' + ${question.id}}" th:text = "${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
                     <span class="text-desc">Elastic日报 • <span th:text="${question.user.name}"></span> 发表了文章 • <span th:text="${question.commentCount}"></span> 个评论 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate,'dd MMMM yyyy')}"></span></span>
                 </div>
             </div>

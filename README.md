@@ -29,7 +29,7 @@ CREATE TABLE user (
 );
 ```
 ```bash
-mvn fiyway:magrite
+mvn flyway:migrate
 
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 ```

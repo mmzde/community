@@ -26,7 +26,7 @@ public class IndexController {
     @RequestMapping("/")
     public String Hello(Model model,
                         @RequestParam(name = "page",defaultValue = "1")Integer page,
-                        @RequestParam(name = "size",defaultValue = "5")Integer size){
+                        @RequestParam(name = "size",defaultValue = "10")Integer size){
 
 
         PaginationDTO paginationDTO = questionService.list(page,size);

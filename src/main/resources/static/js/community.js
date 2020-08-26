@@ -47,8 +47,8 @@ function comment2target(targetId, type, content) {
 
 function comment(e) {
     var commentId = e.getAttribute("data-id");
-    var content = $("#input-"+commentId).val();
-    comment2target(commentId,2,content);
+    var content = $("#input-" + commentId).val();
+    comment2target(commentId, 2, content);
 }
 
 //展开二级评论
@@ -63,34 +63,98 @@ function collapseComments(e) {
         e.classList.remove("active");
         e.removeAttribute("data-collapse");
     } else {
-
-        $.getJSON("/comment/"+id,function (data) {
-
-            var commentBody = $("#comment-body-" + id);
-            var items = [];
-
-            $.each(data.data,function (comment) {
-
-                $("<div/>",{
-                    "class":"col-lg-12 col-md-12 col-sm-12 col-xs-12 comments",
-                    html:items.join("")
-                })
-            })
-
-
-            $("<div/>",{
-                "class":"col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments",
-                "id":"comment-"+id,
-                html:items.join("")
-            }).appendChild(commentBody);
+        var subCommentContainer = $("#comment-" + id);
+        if (subCommentContainer.children().length != 1) {
             //展开二级评论
             comments.addClass("in");
             //二级评论标记状态
             e.setAttribute("data-collapse", "in");
             e.classList.add("active");
-        });
+        } else {
+
+            $.getJSON("/comment/" + id, function (data) {
 
 
+                $.each(data.data.reverse(), function (index, comment) {
+
+
+                    var mediaLeftElement = $("<div/>", {
+                        "class": "media-left"
+                    }).append($("<a/>", {
+                        "href": "#"
+                    }).append($("<img/>", {
+                        "class": "media-object img-rounded img-avartar",
+                        "src": comment.user.avatarUrl
+                    })));
+
+                    var mediaBodyElement = $("<div/>", {
+                        "class": "media-body"
+                    }).append($("<h5>/",{
+                        "class": "media-heading",
+                        "html": comment.user.name
+                    })).append($("<div/>",{
+                        "html":comment.content
+                    })).append($("<div/>",{
+                        "class":"menu"
+                    }).append($("<span/>",{
+                        "class":"pull-right",
+                        "html":moment(comment.gmtCreaten).format('YYYY-MM-DD')
+                    })));
+
+                    var mediaElement = $("<div/>", {
+                        "class": "media"
+                    }).append(mediaLeftElement)
+                        .append(mediaBodyElement);
+
+
+                    var commentElement = $("<div/>", {
+                        "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
+                    });
+                    commentElement.append(mediaElement);
+                    subCommentContainer.prepend(commentElement);
+                });
+
+
+                //
+                // $.each(data.data,function (comment) {
+                //
+                //     $("<div/>",{
+                //         "class":"col-lg-12 col-md-12 col-sm-12 col-xs-12 comments",
+                //         html:items.join("")
+                //     })
+                // })
+                //
+                //
+                // $("<div/>",{
+                //     "class":"col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments",
+                //     "id":"comment-"+id,
+                //     html:items.join("")
+                // }).appendChild(commentBody);
+
+                //展开二级评论
+                comments.addClass("in");
+                //二级评论标记状态
+                e.setAttribute("data-collapse", "in");
+                e.classList.add("active");
+            });
+
+        }
     }
 
+}
+
+function selectTag(e) {
+    var pre = $("#tag").val();
+    var value = e.getAttribute("data-tag");
+    if(pre.indexOf(value) === -1){
+            if(pre){
+                $("#tag").val(pre + ',' + value);
+            }else {
+                $("#tag").val(value);
+            }
+    }
+}
+
+function showSelectTag() {
+    $("#select-tag").show();
 }

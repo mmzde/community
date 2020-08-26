@@ -45,6 +45,11 @@ public class CommentService {
             }
 
             commentMapper.insertComment(comment);
+
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1L);
+            commentMapper.incCommentCount(parentComment);
         }else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());

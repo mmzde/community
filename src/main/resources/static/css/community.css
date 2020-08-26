@@ -83,3 +83,19 @@ body{
 .sub-comments .btn{
     margin-top: 10px;
 }
+.question-tag{
+    margin-right: 5px;
+}
+.question-related{
+    padding-left: 5px;
+    list-style: none;
+    line-height: 20px;
+}
+.tag-table{
+    display: none;
+    margin-top: 2px;
+}
+.publish-tag{
+    margin-right: 10px;
+    line-height: 38px;
+}

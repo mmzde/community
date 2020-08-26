@@ -1,7 +1,9 @@
 package sky.starry.community.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 import sky.starry.community.model.Comment;
+import sky.starry.community.model.Question;
 
 
 public interface CommentMapper {
@@ -14,4 +16,7 @@ public interface CommentMapper {
     Comment selectByPrimaryKey(Long id);
 
     void insertComment(Comment comment);
+
+    @Update("update comment set comment_count=comment_count+#{commentCount} where id = #{id};")
+    void incCommentCount(Comment comment);
 }

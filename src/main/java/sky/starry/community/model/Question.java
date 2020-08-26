@@ -1,5 +1,8 @@
 package sky.starry.community.model;
 
+import lombok.Data;
+
+@Data
 public class Question {
     /**
      *

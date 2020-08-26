@@ -56,4 +56,11 @@
     from question
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectRelated" parameterType="sky.starry.community.model.Question" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"></include>
+        from question
+        where id != #{id}
+            and tag regexp #{tag}
+  </select>
 </mapper>

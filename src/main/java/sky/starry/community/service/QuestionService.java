@@ -1,5 +1,6 @@
 package sky.starry.community.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,10 @@ import sky.starry.community.model.Question;
 import sky.starry.community.model.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -145,5 +149,25 @@ public class QuestionService {
         updateQuestion.setViewCount(1);
         updateQuestion.setId(id);
         questionMapper.incView(updateQuestion);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if(StringUtils.isBlank(questionDTO.getTag())){
+            return new ArrayList<>();
+        }
+
+        Question question = new Question();
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        String regexpTag = String.join("|", tags);
+        question.setId(questionDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions= questionMapper.selectRelated(question);
+
+
+        List<QuestionDTO> questioDTOTag = questions.stream().map(q ->{
+            QuestionDTO questionRelated = new QuestionDTO();
+            BeanUtils.copyProperties(q,questionRelated);
+            return questionRelated;}).collect(Collectors.toList());
+        return questioDTOTag;
     }
 }

@@ -6,6 +6,7 @@
 <generatorConfiguration>
     <classPathEntry    location="D:\mysql-connector-java-8.0.16.jar"/>
     <context id="mysql2java" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/test?serverTimezone=GMT%2B8"
                         userId="root"
@@ -31,10 +32,15 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="comment" domainObjectName="Comment" mapperName="CommentExaMapper"
+<!--        添加分页插件-->
 
-        >
-        </table>
+        <table tableName="notification" domainObjectName="Notification"/>
+<!--table文件名自定义，只能一个一个手写不能多定义-->
+<!--        <table tableName="notification" domainObjectName="Notification" mapperName="NotificationExaMapper">-->
+<!--        </table>-->
+<!--        <table tableName="%"/>-->
+
+<!--        mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate-->
 
     </context>
 </generatorConfiguration>

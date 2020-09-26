@@ -5,20 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sky.starry.community.dto.PaginationDTO;
-import sky.starry.community.dto.QuestionDTO;
-import sky.starry.community.mapper.UserMapper;
-import sky.starry.community.model.Question;
-import sky.starry.community.model.User;
+import sky.starry.community.mapper.UserExtMapper;
 import sky.starry.community.service.QuestionService;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
     @Autowired
-    private UserMapper userMapper;
+    private UserExtMapper userExtMapper;
 
     @Autowired
     private QuestionService questionService;

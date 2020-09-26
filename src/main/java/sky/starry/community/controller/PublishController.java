@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sky.starry.community.cache.TagCache;
 import sky.starry.community.dto.QuestionDTO;
-import sky.starry.community.mapper.QuestionMapper;
-import sky.starry.community.mapper.UserMapper;
+import sky.starry.community.mapper.QuestionExtMapper;
 import sky.starry.community.model.Question;
 import sky.starry.community.model.User;
 import sky.starry.community.service.QuestionService;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpSession;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private QuestionService questionService;

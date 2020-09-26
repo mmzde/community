@@ -8,30 +8,28 @@ import sky.starry.community.Exceptiom.CustomizeErrorCode;
 import sky.starry.community.Exceptiom.CustomizeException;
 import sky.starry.community.dto.PaginationDTO;
 import sky.starry.community.dto.QuestionDTO;
-import sky.starry.community.mapper.QuestionMapper;
-import sky.starry.community.mapper.UserMapper;
+import sky.starry.community.mapper.QuestionExtMapper;
+import sky.starry.community.mapper.UserExtMapper;
 import sky.starry.community.model.Question;
 import sky.starry.community.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
     @Autowired
-    QuestionMapper questionMapper;
+    QuestionExtMapper questionExtMapper;
 
     @Autowired
-    UserMapper userMapper;
+    UserExtMapper userExtMapper;
 
 
     public PaginationDTO list(Integer page, Integer size){
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.count();
+        Integer totalCount = questionExtMapper.count();
 
         Integer pageCount;
         //确认页数
@@ -56,19 +54,19 @@ public class QuestionService {
         Integer offset = size*(page-1);
 
         //获取分页数据
-        List<Question> questions = questionMapper.list(offset,size);
+        List<Question> questions = questionExtMapper.list(offset,size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
 
 
         for (Question question : questions) {
-            User user = userMapper.findByID(question.getCreator());
+            User user = userExtMapper.findByID(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestionDTOS(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
 
         return paginationDTO;
@@ -77,7 +75,7 @@ public class QuestionService {
     public PaginationDTO list(Long userId, Integer page, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.countByUserId(userId);
+        Integer totalCount = questionExtMapper.countByUserId(userId);
 
         Integer pageCount;
         //确认页数
@@ -99,19 +97,19 @@ public class QuestionService {
         Integer offset = size*(page-1);
 
         //获取分页数据
-        List<Question> questions = questionMapper.listByUserId(userId,offset,size);
+        List<Question> questions = questionExtMapper.listByUserId(userId,offset,size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
 
 
         for (Question question : questions) {
-            User user = userMapper.findByID(question.getCreator());
+            User user = userExtMapper.findByID(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question,questionDTO);
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestionDTOS(questionDTOList);
+        paginationDTO.setData(questionDTOList);
 
 
         return paginationDTO;
@@ -119,13 +117,13 @@ public class QuestionService {
 
     public QuestionDTO getById(Long id){
 
-        Question question = questionMapper.getById(id);
+        Question question = questionExtMapper.getById(id);
         if(question == null){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
-        User user = userMapper.findByID(question.getCreator());
+        User user = userExtMapper.findByID(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
@@ -134,10 +132,10 @@ public class QuestionService {
         if(question.getId() == null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionExtMapper.create(question);
         }else {
             question.setGmtModified(System.currentTimeMillis());
-            int i = questionMapper.update(question);
+            int i = questionExtMapper.update(question);
             if(i != 1){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
@@ -148,7 +146,7 @@ public class QuestionService {
         Question updateQuestion = new Question();
         updateQuestion.setViewCount(1);
         updateQuestion.setId(id);
-        questionMapper.incView(updateQuestion);
+        questionExtMapper.incView(updateQuestion);
     }
 
     public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
@@ -161,7 +159,7 @@ public class QuestionService {
         String regexpTag = String.join("|", tags);
         question.setId(questionDTO.getId());
         question.setTag(regexpTag);
-        List<Question> questions= questionMapper.selectRelated(question);
+        List<Question> questions= questionExtMapper.selectRelated(question);
 
 
         List<QuestionDTO> questioDTOTag = questions.stream().map(q ->{

@@ -26,7 +26,7 @@
 </script>
 <body>
 <div th:insert="~{navigation :: copy}"></div>
-<div class="container-fluid main">
+<div class="container-fluid main col-lg-8 col-lg-offset-2">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
@@ -43,7 +43,7 @@
                     <span class="text-desc">Elastic日报 • kimichen123 发表了文章 • 0 个评论 • 72 次浏览 • 15 小时前</span>
                 </div>
             </div>
-            <div class="media" th:each="question : ${pagination.questionDTOS}">
+            <div class="media" th:each="question : ${pagination.Data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded img-avartar" th:src="${question.user.avatarUrl}" alt="">

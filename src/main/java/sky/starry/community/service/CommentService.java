@@ -8,6 +8,8 @@ import sky.starry.community.Exceptiom.CustomizeErrorCode;
 import sky.starry.community.Exceptiom.CustomizeException;
 import sky.starry.community.dto.CommentDTO;
 import sky.starry.community.enums.CommentTypeEnum;
+import sky.starry.community.enums.NotificationEnum;
+import sky.starry.community.enums.NotificationStatusEnum;
 import sky.starry.community.mapper.*;
 import sky.starry.community.model.*;
 
@@ -19,17 +21,20 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
     @Autowired
-    QuestionMapper questionMapper;
+    QuestionExtMapper questionExtMapper;
 
+    @Autowired
+    CommentExtMapper commentExtMapper;
     @Autowired
     CommentMapper commentMapper;
     @Autowired
-    CommentExaMapper commentExaMapper;
+    UserMapper userMapper;
+
     @Autowired
-    UserExaMapper userExaMapper;
+    NotificationMapper notificationMapper;
 
     @Transactional
-    public void insertComment(Comment comment) {
+    public void insertComment(Comment comment,User commentCreator) {
 
         if(comment.getParentId() == null || comment.getParentId()==0){
             throw new CustomizeException(CustomizeErrorCode.COMMENT_PARAM_NOT_FOUND);
@@ -39,27 +44,53 @@ public class CommentService {
         }
         if(comment.getType() == CommentTypeEnum.COMMENT.getType()){
             //回复评论
-            Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            Comment dbComment = commentExtMapper.selectByPrimaryKey(comment.getParentId());
             if(dbComment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
 
-            commentMapper.insertComment(comment);
+            //获取父评论的问题
+            Question question = questionExtMapper.selectByPrimaryKey(dbComment.getParentId());
+            if(question == null){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+
+            commentExtMapper.insertComment(comment);
 
             Comment parentComment = new Comment();
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1L);
-            commentMapper.incCommentCount(parentComment);
+            commentExtMapper.incCommentCount(parentComment);
+
+            //创建通知
+            createNotify(comment,dbComment.getCommenttator(), NotificationEnum.REPLAR_COMMENT,commentCreator.getName(),question.getTitle(),dbComment.getParentId());
         }else {
             //回复问题
-            Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
+            Question question = questionExtMapper.selectByPrimaryKey(comment.getParentId());
             if(question == null){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
-            commentMapper.insertComment(comment);
+            commentExtMapper.insertComment(comment);
             question.setCommentCount(1);
-            questionMapper.incCommentCount(question);
+            questionExtMapper.incCommentCount(question);
+
+            //创建通知
+            createNotify(comment,question.getCreator(), NotificationEnum.REPLAR_QUESTION,commentCreator.getName(),question.getTitle(),question.getId());
         }
+    }
+
+    //创建回复消息
+    private void createNotify(Comment comment, Long receiver, NotificationEnum notificationEnum, String notificationName, String outerTitle, Long outerid) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationEnum.getType());
+        notification.setOuterid(outerid);
+        notification.setNotifier(comment.getCommenttator());
+        notification.setReceiver(receiver);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setNotificationName(notificationName);
+        notification.setOuterTitle(outerTitle);
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
@@ -68,7 +99,7 @@ public class CommentService {
                 .andParentIdEqualTo(id)
                 .andTypeEqualTo(type.getType());
         commentExample.setOrderByClause("gmt_create desc");
-        List<Comment> comments = commentExaMapper.selectByExample(commentExample);
+        List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         if(comments.size() == 0){
             return new ArrayList<>();
@@ -83,7 +114,7 @@ public class CommentService {
         UserExample userexample = new UserExample();
         userexample.createCriteria()
                 .andIdIn(userIds);
-        List<User> users = userExaMapper.selectByExample(userexample);
+        List<User> users = userMapper.selectByExample(userexample);
         Map<Long, User> userMap = users.stream().collect(Collectors.toMap(User::getId, user -> user));
 //      获取comment转化为commentDTO
         List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
